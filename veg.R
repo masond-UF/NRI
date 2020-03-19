@@ -1,5 +1,8 @@
 # 18 March 2020 ####
 library(lubridate)
+library(devtools)
+library(ggord)
+library(vegan)
 # bring in all of the data
 veg_all <- read.csv("OKMME_veg.csv") 
 # convert the date using lubridate
@@ -13,3 +16,6 @@ may_veg <- veg_all[which(veg_all$Month==5),]
 june_veg <- veg_all[which(veg_all$Month==6),]
 july_veg <- veg_all[which(veg_all$Month==7),]
 # Create ordinations ####
+ggord(ord_top_5)
+
+			
