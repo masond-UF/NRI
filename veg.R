@@ -19,15 +19,20 @@ may_all <- veg_all[which(veg_all$Month==5),]
 june_all <- veg_all[which(veg_all$Month==6),]
 july_all <- veg_all[which(veg_all$Month==7),]
 # subset the data to get just vegetation
-march_veg <- march_all[,9:97]
-march_env <- march_all[,1:8]
+march_veg <- march_all[,9:97] # take just average cover
+march_veg <- march_veg[, colSums(march_veg != 0) > 0] # get rid of empty columns
+march_env <- march_all[,1:8] # take just environmental variables
 april_veg <- april_all[,9:97]
+april_veg <- april_veg[, colSums(april_veg != 0) > 0]
 april_env <- april_all[,1:8]
 may_veg <- may_all[,9:97]
+may_veg <- may_veg[, colSums(may_veg != 0) > 0]
 may_env <- may_all[,1:8]
 june_veg <- june_all[,9:97]
+june_veg <- june_veg[, colSums(june_veg != 0) > 0]
 june_env <- june_all[,1:8]
 july_veg <- july_all[,9:97]
+july_veg <- july_veg[, colSums(july_veg != 0) > 0]
 july_env <- july_all[,1:8]
 # Create March ordination ####
 march_ord <- metaMDS(march_veg)
@@ -76,12 +81,10 @@ ggplot() +
 													 aes(x=NMDS1,y=NMDS2,label=Site))+
 	geom_point(data=april_data_scores_env,
 						 aes(x=NMDS1,y=NMDS2,shape=Exclusion,colour=Carrion),size=3)+
-	coord_equal()+
+	coord_equal(xlim = c(-1, 1), ylim = c(-1,1))+
+	ggtitle("April")+
 	theme_classic()+
 	scale_color_manual(values = c("High" = "Blue", "Low" = "Orange", "None" = "Purple"))
-
-
-			
 # Create May ordination ####
 may_ord <- metaMDS(may_veg)
 
@@ -105,7 +108,8 @@ ggplot() +
 													 aes(x=NMDS1,y=NMDS2,label=Site))+
 	geom_point(data=may_data_scores_env,
 						 aes(x=NMDS1,y=NMDS2,shape=Exclusion,colour=Carrion),size=3)+
-	coord_equal()+
+	coord_equal(xlim = c(-1,1), ylim = c(-1,1))+
+	ggtitle("May")+
 	theme_classic()+
 	scale_color_manual(values = c("High" = "Blue", "Low" = "Orange", "None" = "Purple"))
 # Create June ordination ####
@@ -135,7 +139,8 @@ ggplot() +
 													 aes(x=NMDS1,y=NMDS2,label=Site))+
 	geom_point(data=june_data_scores_env,
 						 aes(x=NMDS1,y=NMDS2,shape=Exclusion,colour=Carrion),size=3)+
-	coord_equal()+
+	coord_equal(xlim = c(-1,1), ylim = c(-1,1))+
+	ggtitle("June")+
 	theme_classic()+
 	scale_color_manual(values = c("High" = "Blue", "Low" = "Orange", "None" = "Purple"))
 
@@ -155,20 +160,14 @@ july_species_scores <- as.data.frame(scores(july_ord, "species"))
 
 # create a column of species, from the rownames of species.scores
 july_species_scores$Species <- rownames(july_species_scores)  
-
-
-
-
-
-
 # Use ggplot2 to visualize the July ordination ####
 ggplot() + 
 	ggrepel::geom_text_repel(data=july_data_scores_env,
 													 aes(x=NMDS1,y=NMDS2,label=Site))+
-	# geom_text(data=july_species_scores,aes(x=NMDS1,y=NMDS2,label=Species),alpha=0.5)+  
 	geom_point(data=july_data_scores_env,
 						 aes(x=NMDS1,y=NMDS2,shape=Exclusion,colour=Carrion),size=3)+
-	coord_equal()+
+	coord_equal(xlim = c(-1, 1), ylim = c(-1,1))+
+	ggtitle("July")+
 	theme_classic()+
 	scale_color_manual(values = c("High" = "Blue", "Low" = "Orange", "None" = "Purple"))
 

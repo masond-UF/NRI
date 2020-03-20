@@ -1,71 +1,106 @@
-# 19 March 2020 ####
+# 20 March 2020 
+spec_time <- function(x){
+
 veg_all <- read.csv("OKMME_veg.csv") 
 library(tidyr)
 library(ggplot2)
 library(lubridate)
+library(dplyr)
 # Make the data wide
 veg_wide <- veg_all %>% 
-							 pivot_longer(-Site:-Date,
+	pivot_longer(-Site:-Date,
 							 names_to = "species", values_to = "abundance")
-
-REF <- veg_wide %>% 
-	filter(Treatment == "REF")
-
-# APRIL ####
+# APRIL
 # Filter out the reference
-BRJA_april-REF <- veg_wide %>% 
-	filter(species == "BRJA" & Month == "5" & Treatment == "REF")
+april_REF <- veg_wide %>% 
+	dplyr::filter(species == x & Month == "4" & Treatment == "REF")
 # Attach the reference value to the corresponding sites
-BRJA_april <- veg_wide %>% 
-	filter(species == "BRJA" & Month == "4" & Treatment != "REF") %>% 
-	mutate(Reference = ifelse(Site == "OS", BRJA_april_REF[3,10],
-														ifelse(Site == "GG", BRJA_april_REF[4,10],
-																	 ifelse(Site == "DF", BRJA_april_REF[1,10],
-																	 			 ifelse(Site == "WP", BRJA_april_REF[2,10],NA)))))
+april <- veg_wide %>% 
+	filter(species == x & Month == "4" & Treatment != "REF") %>% 
+	mutate(Reference = ifelse(Site == "OS", april_REF[3,10],
+														ifelse(Site == "GG", april_REF[4,10],
+																	 ifelse(Site == "DF", april_REF[1,10],
+																	 			 ifelse(Site == "WP", april_REF[2,10],NA)))))
 # Calculate the difference between the abundance and the corresponding reference 
-BRJA_april$Change <- (BRJA_april$abundance - as.numeric(BRJA_april$Reference))
+april$Change <- (april$abundance - as.numeric(april$Reference))
 # Calculate the average, SD, and CI 
-BRJA_april_mean <- BRJA_april %>% 
+april_mean <- april %>% 
 	group_by(Treatment) %>% 
 	summarise(Mean = mean(Change), SD = sd(Change), CI = (2*sd(Change)))
 # Add the date
-BRJA_april_mean <- BRJA_april_mean %>% 
+april_mean <- april_mean %>% 
 	mutate(Date = as_date(paste0("2019","-","4","-","21")))
-# Calculate the difference between the abundance and the corresponding reference 
-BRJA_april$Change <- (BRJA_april$abundance - as.numeric(BRJA_april$Reference))
-# Calculate the average, SD, and CI 
-BRJA_april_mean <- BRJA_april %>% 
-	group_by(Treatment) %>% 
-	summarise(Mean = mean(Change), SD = sd(Change), CI = (2*sd(Change)))
-# MAY ####
+# MAY
 # Filter out the reference
-BRJA_may_REF <- veg_wide %>% 
-	filter(species == "BRJA" & Month == "4" & Treatment == "REF")
+may_REF <- veg_wide %>% 
+	filter(species == x & Month == "5" & Treatment == "REF")
 # Attach the reference value to the corresponding sites
-BRJA_may <- veg_wide %>% 
-	filter(species == "BRJA" & Month == "4" & Treatment != "REF") %>% 
-	mutate(Reference = ifelse(Site == "OS", BRJA_may_REF[3,10],
-														ifelse(Site == "GG", BRJA_may_REF[4,10],
-																	 ifelse(Site == "DF", BRJA_may_REF[1,10],
-																	 			 ifelse(Site == "WP", BRJA_may_REF[2,10],NA)))))
+may <- veg_wide %>% 
+	filter(species == x & Month == "5" & Treatment != "REF") %>% 
+	mutate(Reference = ifelse(Site == "OS", may_REF[3,10],
+														ifelse(Site == "GG", may_REF[4,10],
+																	 ifelse(Site == "DF", may_REF[1,10],
+																	 			 ifelse(Site == "WP", may_REF[2,10],NA)))))
 # Calculate the difference between the abundance and the corresponding reference 
-BRJA_may$Change <- (BRJA_may$abundance - as.numeric(BRJA_may$Reference))
+may$Change <- (may$abundance - as.numeric(may$Reference))
 # Calculate the average, SD, and CI 
-BRJA_may_mean <- BRJA_may %>% 
+may_mean <- may %>% 
 	group_by(Treatment) %>% 
 	summarise(Mean = mean(Change), SD = sd(Change), CI = (2*sd(Change)))
 # Add the date
-BRJA_may_mean <- BRJA_may_mean %>% 
-	mutate(Date = as_date(paste0("2019","-","4","-","21")))
+may_mean <- may_mean %>% 
+	mutate(Date = as_date(paste0("2019","-","5","-","6")))
+# JUNE
+# Filter out the reference
+june_REF <- veg_wide %>% 
+	filter(species == x & Month == "6" & Treatment == "REF")
+# Attach the reference value to the corresponding sites
+june <- veg_wide %>% 
+	filter(species == x & Month == "6" & Treatment != "REF") %>% 
+	mutate(Reference = ifelse(Site == "OS", june_REF[3,10],
+														ifelse(Site == "GG", june_REF[4,10],
+																	 ifelse(Site == "DF", june_REF[1,10],
+																	 			 ifelse(Site == "WP", june_REF[2,10],NA)))))
 # Calculate the difference between the abundance and the corresponding reference 
-BRJA_may$Change <- (BRJA_may$abundance - as.numeric(BRJA_may$Reference))
+june$Change <- (june$abundance - as.numeric(june$Reference))
 # Calculate the average, SD, and CI 
-BRJA_may_mean <- BRJA_may %>% 
+june_mean <- june %>% 
 	group_by(Treatment) %>% 
 	summarise(Mean = mean(Change), SD = sd(Change), CI = (2*sd(Change)))
 # Add the date
-BRJA_may_mean <- BRJA_may_mean %>% 
-	mutate(Date = as_date(paste0("2019","-","4","-","21")))
-
-
+june_mean <- june_mean %>% 
+	mutate(Date = as_date(paste0("2019","-","6","-","2")))
+# JULY
+# Filter out the reference
+july_REF <- veg_wide %>% 
+	filter(species == x & Month == "7" & Treatment == "REF")
+# Attach the reference value to the corresponding sites
+july <- veg_wide %>% 
+	filter(species == x & Month == "7" & Treatment != "REF") %>% 
+	mutate(Reference = ifelse(Site == "OS", july_REF[3,10],
+														ifelse(Site == "GG", july_REF[4,10],
+																	 ifelse(Site == "DF", july_REF[1,10],
+																	 			 ifelse(Site == "WP", july_REF[2,10],NA)))))
+# Calculate the difference between the abundance and the corresponding reference 
+july$Change <- (july$abundance - as.numeric(july$Reference))
+# Calculate the average, SD, and CI 
+july_mean <- july %>% 
+	group_by(Treatment) %>% 
+	summarise(Mean = mean(Change), SD = sd(Change), CI = (2*sd(Change)))
+# Add the date
+july_mean <- july_mean %>% 
+	mutate(Date = as_date(paste0("2019","-","7","-","21")))
+# Final
+final <- rbind(april_mean, may_mean, 
+										june_mean, july_mean)
+return(final)
+} 
+spec_time_figure <- function(x){
+p <- ggplot(x, aes(x = Date, y = Mean))+
+		geom_point()+
+		geom_line()+
+		geom_errorbar(aes(ymin = Mean-SD, ymax = Mean+SD))+
+		facet_wrap(~Treatment)
+return(p)
+}
 
