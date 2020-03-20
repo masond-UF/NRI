@@ -165,7 +165,7 @@ july_species_scores$Species <- rownames(july_species_scores)
 ggplot() + 
 	ggrepel::geom_text_repel(data=july_data_scores_env,
 													 aes(x=NMDS1,y=NMDS2,label=Site))+
-	geom_text(data=july_species_scores,aes(x=NMDS1,y=NMDS2,label=Species),alpha=0.5)+  
+	# geom_text(data=july_species_scores,aes(x=NMDS1,y=NMDS2,label=Species),alpha=0.5)+  
 	geom_point(data=july_data_scores_env,
 						 aes(x=NMDS1,y=NMDS2,shape=Exclusion,colour=Carrion),size=3)+
 	coord_equal()+
