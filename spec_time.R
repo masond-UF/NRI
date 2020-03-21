@@ -22,7 +22,7 @@ april <- veg_wide %>%
 																	 ifelse(Site == "DF", april_REF[1,10],
 																	 			 ifelse(Site == "WP", april_REF[2,10],NA)))))
 # Calculate the difference between the abundance and the corresponding reference 
-april$Change <- (april$abundance - as.numeric(april$Reference))
+april$Change <- log(april$abundance/(as.numeric(april$Reference)+0.001)+ 0.001)
 # Calculate the average, SD, and CI 
 april_mean <- april %>% 
 	group_by(Treatment) %>% 
@@ -42,7 +42,7 @@ may <- veg_wide %>%
 																	 ifelse(Site == "DF", may_REF[1,10],
 																	 			 ifelse(Site == "WP", may_REF[2,10],NA)))))
 # Calculate the difference between the abundance and the corresponding reference 
-may$Change <- (may$abundance - as.numeric(may$Reference))
+may$Change <- log(may$abundance/(as.numeric(may$Reference)+0.001)+ 0.001)
 # Calculate the average, SD, and CI 
 may_mean <- may %>% 
 	group_by(Treatment) %>% 
@@ -62,7 +62,7 @@ june <- veg_wide %>%
 																	 ifelse(Site == "DF", june_REF[1,10],
 																	 			 ifelse(Site == "WP", june_REF[2,10],NA)))))
 # Calculate the difference between the abundance and the corresponding reference 
-june$Change <- (june$abundance - as.numeric(june$Reference))
+june$Change <- log(june$abundance/(as.numeric(june$Reference)+0.001)+ 0.001)
 # Calculate the average, SD, and CI 
 june_mean <- june %>% 
 	group_by(Treatment) %>% 
@@ -82,7 +82,7 @@ july <- veg_wide %>%
 																	 ifelse(Site == "DF", july_REF[1,10],
 																	 			 ifelse(Site == "WP", july_REF[2,10],NA)))))
 # Calculate the difference between the abundance and the corresponding reference 
-july$Change <- (july$abundance - as.numeric(july$Reference))
+july$Change <- log(july$abundance/(as.numeric(july$Reference)+0.001)+ 0.001)
 # Calculate the average, SD, and CI 
 july_mean <- july %>% 
 	group_by(Treatment) %>% 
@@ -104,3 +104,5 @@ p <- ggplot(x, aes(x = Date, y = Mean))+
 return(p)
 }
 
+fart <- spec_time("DEAD")
+spec_time_figure(fart)
