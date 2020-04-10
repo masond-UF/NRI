@@ -2,6 +2,10 @@
 spec_time <- function(x){
 
 veg_all <- read.csv("OKMME_veg.csv") 
+func_veg <- read.csv("func_veg.csv") 
+func_veg <- func_veg[,2:4]
+veg_all <- bind_cols(veg_all, func_veg)
+
 library(tidyr)
 library(ggplot2)
 library(lubridate)
@@ -104,5 +108,10 @@ p <- ggplot(x, aes(x = Date, y = Mean))+
 return(p)
 }
 
-fart <- spec_time("DEAD")
-spec_time_figure(fart)
+PD <- spec_time("PD")
+ND <- spec_time("ND")
+PY <- spec_time("PY")
+
+spec_time_figure(PD)
+spec_time_figure(PY)
+spec_time_figure(ND)
