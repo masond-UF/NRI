@@ -1,9 +1,12 @@
 # 20 March 2020 
+library(ggplot2)
+library(cowplot)
+library(tidyverse)
 spec_time <- function(x){
 
 veg_all <- read.csv("OKMME_veg.csv") 
 func_veg <- read.csv("func_veg.csv") 
-func_veg <- func_veg[,2:4]
+func_veg <- func_veg[,2:5]
 veg_all <- bind_cols(veg_all, func_veg)
 
 library(tidyr)
@@ -97,34 +100,42 @@ july_mean <- july_mean %>%
 # Final
 final <- rbind(april_mean, may_mean, 
 										june_mean, july_mean)
+final$Treatment <- factor(final$Treatment, levels = c("CH", "CO", "CS", "MH", "MO", "MS"),
+											labels = c("Low biomass & herbivore exclusion", 
+																 "Low biomass & open",
+																 "Low biomass & scavenger exclusion",
+																 "High biomass & herbivore exclusion",
+																 "High biomass and open",
+																 "High biomass & scavenger exclusion"))
 return(final)
 } 
 spec_time_figure <- function(x){
 p <- ggplot(x, aes(x = Date, y = Mean))+
-		geom_point()+
-		geom_line()+
-		geom_errorbar(aes(ymin = Mean-SD, ymax = Mean+SD))+
-		facet_wrap(~Treatment)
+	geom_point()+
+	ylab("Mean Abundance Effect Size")+
+	ylim(-12,8)+
+	ggtitle(deparse(substitute(x)))+  
+	geom_errorbar(aes(ymin = Mean-SD, ymax = Mean+SD), width = 5)+
+	theme_bw()+
+	theme(plot.title = element_text(hjust = 0.5))+
+	theme(strip.background =element_rect(fill="black"))+
+	theme(strip.text = element_text(colour = 'white'))+
+	theme(panel.grid.minor = element_blank())+
+	facet_wrap(~Treatment)
 return(p)
 }
 
 PD <- spec_time("PD")
 ND <- spec_time("ND")
 PY <- spec_time("PY")
+NONE <- spec_time("NONE")
 
-spec_time_figure(PD)
-spec_time_figure(PY)
-spec_time_figure(ND)
+PD_fig <- spec_time_figure(PD)
+PY_fig <- spec_time_figure(PY)
+ND_fig <- spec_time_figure(ND)
+NONE_fig <- spec_time_figure(NONE)
 
-ggplot(PD, aes(x = Date, y = Mean))+
-	geom_point()+
-	geom_line()+
-	ylab("Mean Abundance Effect Size")+
-	ylim(-10,5)+
-	ggtitle(deparse(substitute(PD)))+  
-	geom_errorbar(aes(ymin = Mean-SD, ymax = Mean+SD))+
-	theme_bw()+
-	theme(plot.title = element_text(hjust = 0.5))+
-	theme(strip.background =element_rect(fill="black"))+
-	theme(strip.text = element_text(colour = 'white'))+
-	facet_wrap(~Treatment)
+panel_c <- plot_grid(PD_fig, PY_fig, ND_fig, NONE_fig, 
+					 labels = c('C.1', 'C.2', 'C.3', 'C.4'),
+					 label_colour = "red")
+

@@ -20,6 +20,7 @@ PD <- c("BRJA", "BOCU", "AECY", "DICHA2", "OPUNT", "APIAC", "BOHI2", "GAVI",
 				"HYTE2", "VEHA", "ERPU", "ERLE11")
 ND <- c("THIFI","BOHI2", "AMDR", "LASE", "KRLA")
 PY <- c("SIDA", "CLOVER", "VICIA", "COEQ")
+NONE <- c("LIT", "DEAD", "PIG", "BG")
 
 # BOYS = BOIS
 # Code for conversion ####
@@ -36,6 +37,10 @@ PY_veg <- veg_all[ ,intersect(names(veg_all),PY)]
 PY_veg <- PY_veg %>% 
 	mutate(PY = rowSums(.)) %>% 
 	select(PY)
+NONE_veg <- veg_all[ ,intersect(names(veg_all),NONE)]
+NONE_veg <- NONE_veg %>% 
+	mutate(NONE = rowSums(.)) %>% 
+	select(NONE)
 # Create a new data frame using the new columns ####
-func_veg <- bind_cols(list(PD_veg, PY_veg, ND_veg))
+func_veg <- bind_cols(list(PD_veg, PY_veg, ND_veg, NONE_veg))
 write.csv(func_veg, file = "func_veg.csv")
