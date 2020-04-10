@@ -36,6 +36,6 @@ PY_veg <- veg_all[ ,intersect(names(veg_all),PY)]
 PY_veg <- PY_veg %>% 
 	mutate(PY = rowSums(.)) %>% 
 	select(PY)
-# Create a new data frame using the new columns
-veg_info <- veg_all[,1:8]
-func_veg <- bind_cols(list(veg_info, PD_veg, PY_veg, ND_veg))
+# Create a new data frame using the new columns ####
+func_veg <- bind_cols(list(PD_veg, PY_veg, ND_veg))
+write.csv(func_veg, file = "func_veg.csv")

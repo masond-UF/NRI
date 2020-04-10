@@ -115,3 +115,16 @@ PY <- spec_time("PY")
 spec_time_figure(PD)
 spec_time_figure(PY)
 spec_time_figure(ND)
+
+ggplot(PD, aes(x = Date, y = Mean))+
+	geom_point()+
+	geom_line()+
+	ylab("Mean Abundance Effect Size")+
+	ylim(-10,5)+
+	ggtitle(deparse(substitute(PD)))+  
+	geom_errorbar(aes(ymin = Mean-SD, ymax = Mean+SD))+
+	theme_bw()+
+	theme(plot.title = element_text(hjust = 0.5))+
+	theme(strip.background =element_rect(fill="black"))+
+	theme(strip.text = element_text(colour = 'white'))+
+	facet_wrap(~Treatment)
