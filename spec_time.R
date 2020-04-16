@@ -139,3 +139,4 @@ panel_c <- plot_grid(PD_fig, PY_fig, ND_fig, NONE_fig,
 					 labels = c('C.1', 'C.2', 'C.3', 'C.4'),
 					 label_colour = "red")
 
+for_marcus <- plot_grid(PD_fig, PY_fig, ND_fig, NONE_fig)

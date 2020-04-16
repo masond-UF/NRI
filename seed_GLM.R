@@ -37,7 +37,6 @@ exp(-1.1954 - 0.6839)/(1+exp(-1.1954-0.6839))
 exp(-1.1954 - 0.7826643)/(1+exp(-1.1954-0.7826643))
 
 # Create effect size dataframe ####
-
 ref_survival <- ref %>% 
 	group_by(SITE, PACKET, TYPE) %>% 
 	summarize(counts=n(), sums=sum(FINAL.STATUS)) %>% 
@@ -84,16 +83,89 @@ survival <- survival %>%
 hist(survival$diff)
 
 m2 <- lme(fixed = diff ~ TYPE + BIOMASS + EXCL + PACKET,
-				 random = ~1|SITE, data = survival)
+				 random = ~1|SITE, data = survival, method = "ML")
+m3 <- lme(fixed = diff ~ TYPE + EXCL + PACKET,
+				 random = ~1|SITE, data = survival, method = "ML")
+m4 <- lme(fixed = diff ~ TYPE + BIOMASS + PACKET,
+				 random = ~1|SITE, data = survival, method = "ML")
+m5 <- lme(fixed = diff ~ TYPE + PACKET,
+				 random = ~1|SITE, data = survival, method = "ML")
 
 plot(m2) # residuals homogenous
 shapiro.test(m2$residuals) # residuals normally distributed
-summary(m2)
+summary(m5)
+summary(m3)
 # Make a boxplot ####
 install.packages("seaborn.boxplot")
 survival <- survival %>% 
 	mutate(ln = log(survival))
 
-ggplot(data = survival)+
-	geom_boxplot(aes(x = PACKET, y = diff, fill  = TYPE))+
-	facet_grid(BIOMASS~EXCL)
+ggplot(data = survival, aes(x = PACKET, y = diff))+
+	geom_boxplot(aes(fill  = TYPE))+
+	scale_fill_viridis_d(option = "D")+
+	ylab("Δ Survival")+
+	labs(fill = "Functional group")+
+	facet_grid(BIOMASS~EXCL)+
+	xlab("Placement")+
+	theme_bw()
+
+
+ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
+	geom_jitter(aes(fill = TYPE), color = "black", pch = 21, 
+						 alpha = 0.3, size = 3.5,
+						 position = position_jitter(width = .05, height = 0.5))+
+	scale_fill_viridis_d(option = "D")+
+	geom_boxplot(alpha = 0, colour = "black")+
+	labs(fill = "Functional group")+
+	ggtitle("Seed response to carrion")+
+	facet_grid(~TYPE)+
+	xlab("Placement")+
+	theme_bw()+
+	theme(strip.background = element_blank(),
+  strip.text.x = element_blank())
+
+# Create a version with mean and 95% CIs ####
+min.mean.sd.max <- function(x) { # Function for calculating summary statistics
+  r <- c(min(x), mean(x) - sd(x), mean(x), mean(x) + sd(x), max(x))
+  names(r) <- c("ymin", "lower", "middle", "upper", "ymax")
+  r
+}
+
+# rename levels of factor
+levels(survival$PACKET)[levels(survival$PACKET)=="AA"] <- "Rain adjacent"
+levels(survival$PACKET)[levels(survival$PACKET)=="AT"] <- "Rain proximal"
+levels(survival$PACKET)[levels(survival$PACKET)=="BA"] <- "Bank adjacent"
+levels(survival$PACKET)[levels(survival$PACKET)=="BU"] <- "Bank proximal"
+
+# reorder levels of factor
+survival$PACKET <- factor(survival$PACKET, levels = c("Bank proximal",
+										"Bank adjacent", "Rain proximal", "Rain adjacent"))
+
+# make the label take up two lines
+levels(survival$PACKET) <- gsub(" ", "\n", levels(survival$PACKET))
+
+
+
+bank <- ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
+	stat_summary(fun.data = min.mean.sd.max, geom = "boxplot", color = "black")+ 
+	geom_jitter(aes(fill = TYPE), color = "black", pch = 21, 
+						 alpha = 0.3, size = 3.5,
+						 position = position_jitter(width = .04, height = 0.4))+
+	scale_fill_viridis_d(option = "D")+
+	labs(fill = "Functional group")+
+	ggtitle("Seed response to carrion")+
+	facet_grid(~TYPE)+
+	xlab("Placement")+
+	ylab("Δ Survival")+
+	theme_bw()+
+	theme(strip.background = element_blank(),
+  strip.text.x = element_blank())+
+	theme(legend.position = "bottom")+
+	theme(
+  axis.title.x = element_text(size = 12),
+  axis.text.x = element_text(size = 7),
+  axis.title.y = element_text(size = 12),
+  axis.text.y = element_text(size = 10))+
+	theme(axis.title.x = element_text(margin = margin(t = 20)))+
+	theme(plot.title = element_text(hjust = 0.5))
+

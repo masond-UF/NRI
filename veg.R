@@ -6,6 +6,7 @@ library(vegan)
 library(tidyverse)
 library(ggplot2)
 library(ggrepel)
+library(cowplot)
 # bring in all of the data
 veg_all <- read.csv("OKMME_veg.csv") 
 # convert the date using lubridate
@@ -76,7 +77,7 @@ april_species_scores <- as.data.frame(scores(april_ord, "species"))
 # create a column of species, from the rownames of species.scores
 april_species_scores$Species <- rownames(april_species_scores)  
 # Use ggplot2 to visualize the April ordination ####
-ggplot() + 
+april <- ggplot() + 
 	ggrepel::geom_text_repel(data=april_data_scores_env,
 													 aes(x=NMDS1,y=NMDS2,label=Site))+
 	geom_point(data=april_data_scores_env,
@@ -103,7 +104,7 @@ may_species_scores <- as.data.frame(scores(may_ord, "species"))
 may_species_scores$Species <- rownames(may_species_scores)  
 
 # Use ggplot2 to visualize the May ordination ####
-ggplot() + 
+may <- ggplot() + 
 	ggrepel::geom_text_repel(data=may_data_scores_env,
 													 aes(x=NMDS1,y=NMDS2,label=Site))+
 	geom_point(data=may_data_scores_env,
@@ -134,7 +135,7 @@ june_species_scores$Species <- rownames(june_species_scores)
 
 
 # Use ggplot2 to visualize the June ordination ####
-ggplot() + 
+june <- ggplot() + 
 	ggrepel::geom_text_repel(data=june_data_scores_env,
 													 aes(x=NMDS1,y=NMDS2,label=Site))+
 	geom_point(data=june_data_scores_env,
@@ -161,7 +162,7 @@ july_species_scores <- as.data.frame(scores(july_ord, "species"))
 # create a column of species, from the rownames of species.scores
 july_species_scores$Species <- rownames(july_species_scores)  
 # Use ggplot2 to visualize the July ordination ####
-ggplot() + 
+july <- ggplot() + 
 	ggrepel::geom_text_repel(data=july_data_scores_env,
 													 aes(x=NMDS1,y=NMDS2,label=Site))+
 	geom_point(data=july_data_scores_env,
@@ -171,3 +172,21 @@ ggplot() +
 	theme_classic()+
 	scale_color_manual(values = c("High" = "Blue", "Low" = "Orange", "None" = "Purple"))
 
+legend_b <- get_legend(
+  april + 
+    guides(color = guide_legend(nrow = 1)) +
+    theme(legend.position = "bottom"))
+
+prow <- plot_grid(
+  april + theme(legend.position="none"),
+  may + theme(legend.position="none"),
+  june + theme(legend.position="none"),
+  july + theme(legend.position="none"),
+  align = 'vh',
+  hjust = -1,
+  nrow = 2
+)
+
+prow
+
+plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1))
