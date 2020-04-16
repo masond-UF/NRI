@@ -2,6 +2,7 @@
 library(ggplot2)
 library(cowplot)
 library(tidyverse)
+
 spec_time <- function(x){
 
 veg_all <- read.csv("OKMME_veg.csv") 
@@ -17,7 +18,7 @@ library(dplyr)
 veg_wide <- veg_all %>% 
 	pivot_longer(-Site:-Date,
 							 names_to = "species", values_to = "abundance")
-# APRIL
+# APRIL ####
 # Filter out the reference
 april_REF <- veg_wide %>% 
 	dplyr::filter(species == x & Month == "4" & Treatment == "REF")
@@ -37,7 +38,7 @@ april_mean <- april %>%
 # Add the date
 april_mean <- april_mean %>% 
 	mutate(Date = as_date(paste0("2019","-","4","-","21")))
-# MAY
+# MAY ####
 # Filter out the reference
 may_REF <- veg_wide %>% 
 	filter(species == x & Month == "5" & Treatment == "REF")
@@ -121,9 +122,15 @@ p <- ggplot(x, aes(x = Date, y = Mean))+
 	theme(strip.background =element_rect(fill="black"))+
 	theme(strip.text = element_text(colour = 'white'))+
 	theme(panel.grid.minor = element_blank())+
-	facet_wrap(~Treatment)
+	facet_wrap(~Treatment)+
+	theme(strip.text.x = element_text(size = 8))+
+	theme(axis.text.x = element_text(size = 8))+
+  scale_x_date(limits = as.Date(c("2019-04-21", "2019-07-21")))
 return(p)
 }
+
+breaks = c("2019-04-21", "2019-05-06",
+					"2019-06-02", "2019-07-21")
 
 PD <- spec_time("PD")
 ND <- spec_time("ND")

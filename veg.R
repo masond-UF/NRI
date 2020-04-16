@@ -85,7 +85,7 @@ april <- ggplot() +
 	coord_equal(xlim = c(-1, 1), ylim = c(-1,1))+
 	ggtitle("April")+
 	theme_classic()+
-	scale_color_manual(values = c("High" = "Blue", "Low" = "Orange", "None" = "Purple"))
+	scale_color_viridis_d(option = "C", alpha = 0.7)
 # Create May ordination ####
 may_ord <- metaMDS(may_veg)
 
@@ -112,7 +112,7 @@ may <- ggplot() +
 	coord_equal(xlim = c(-1,1), ylim = c(-1,1))+
 	ggtitle("May")+
 	theme_classic()+
-	scale_color_manual(values = c("High" = "Blue", "Low" = "Orange", "None" = "Purple"))
+		scale_color_viridis_d(option = "C", alpha = 0.7)
 # Create June ordination ####
 june_ord <- metaMDS(june_veg)
 
@@ -143,7 +143,7 @@ june <- ggplot() +
 	coord_equal(xlim = c(-1,1), ylim = c(-1,1))+
 	ggtitle("June")+
 	theme_classic()+
-	scale_color_manual(values = c("High" = "Blue", "Low" = "Orange", "None" = "Purple"))
+	scale_color_viridis_d(option = "C", alpha = 0.7)
 
 # Create July ordination ####
 july_ord <- metaMDS(july_veg)
@@ -170,7 +170,7 @@ july <- ggplot() +
 	coord_equal(xlim = c(-1, 1), ylim = c(-1,1))+
 	ggtitle("July")+
 	theme_classic()+
-	scale_color_manual(values = c("High" = "Blue", "Low" = "Orange", "None" = "Purple"))
+	scale_color_viridis_d(option = "C", alpha = 0.7)
 
 legend_b <- get_legend(
   april + 
@@ -184,9 +184,10 @@ prow <- plot_grid(
   july + theme(legend.position="none"),
   align = 'vh',
   hjust = -1,
-  nrow = 2
-)
+  nrow = 2,
+  labels = c('D.1', 'D.2', 'D.3', 'D.4'),
+											 label_colour = "red")
 
 prow
 
-plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1))
+ord_final <- plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1))

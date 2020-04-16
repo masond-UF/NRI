@@ -155,7 +155,7 @@ bank <- ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
 	labs(fill = "Functional group")+
 	ggtitle("Seed response to carrion")+
 	facet_grid(~TYPE)+
-	xlab("Placement")+
+	xlab("Seed location")+
 	ylab("Δ Survival")+
 	theme_bw()+
 	theme(strip.background = element_blank(),
