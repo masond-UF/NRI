@@ -146,8 +146,21 @@ levels(survival$PACKET) <- gsub(" ", "\n", levels(survival$PACKET))
 
 
 
+# First write a function that compute the min, mean-1SEM, mean, mean+1SEM, and Max. Then map these 5 values onto a boxplot using stat_summary.
+
+library(gridExtra)
+library(ggplot2)
+
+MinMeanSEMMax <- function(x) {
+  v <- c(min(x), mean(x) - sd(x)/sqrt(length(x)), mean(x), mean(x) + sd(x)/sqrt(length(x)), max(x))
+  names(v) <- c("ymin", "lower", "middle", "upper", "ymax")
+  v
+}
+
+
+
 bank <- ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
-	stat_summary(fun.data = min.mean.sd.max, geom = "boxplot", color = "black")+ 
+	stat_summary(fun.data = MinMeanSEMMax, geom = "boxplot", color = "black")+ 
 	geom_jitter(aes(fill = TYPE), color = "black", pch = 21, 
 						 alpha = 0.3, size = 3.5,
 						 position = position_jitter(width = .04, height = 0.4))+

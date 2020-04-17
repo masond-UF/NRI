@@ -125,7 +125,10 @@ p <- ggplot(x, aes(x = Date, y = Mean))+
 	facet_wrap(~Treatment)+
 	theme(strip.text.x = element_text(size = 8))+
 	theme(axis.text.x = element_text(size = 8))+
-  scale_x_date(limits = as.Date(c("2019-04-21", "2019-07-21")))
+  scale_x_date(limits = as.Date(c("2019-04-21", "2019-07-21")))+
+	scale_x_date(limits = as.Date(c("2019-03-21", "2019-07-21")),
+	date_labels = "%b-%y",
+	date_breaks = "1 month")
 return(p)
 }
 
