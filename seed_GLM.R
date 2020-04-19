@@ -137,6 +137,11 @@ levels(survival$PACKET)[levels(survival$PACKET)=="AT"] <- "Rain proximal"
 levels(survival$PACKET)[levels(survival$PACKET)=="BA"] <- "Bank adjacent"
 levels(survival$PACKET)[levels(survival$PACKET)=="BU"] <- "Bank proximal"
 
+levels(survival$TYPE)[levels(survival$TYPE)=="ND"] <- "No dormancy"
+levels(survival$TYPE)[levels(survival$TYPE)=="PD"] <- "Physiological dormancy"
+levels(survival$TYPE)[levels(survival$TYPE)=="PY"] <- "Physical dormancy"
+
+
 # reorder levels of factor
 survival$PACKET <- factor(survival$PACKET, levels = c("Bank proximal",
 										"Bank adjacent", "Rain proximal", "Rain adjacent"))
@@ -158,12 +163,12 @@ MinMeanSEMMax <- function(x) {
 }
 
 
-
+# Boxplot ####
 bank <- ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
 	stat_summary(fun.data = MinMeanSEMMax, geom = "boxplot", color = "black")+ 
 	geom_jitter(aes(fill = TYPE), color = "black", pch = 21, 
-						 alpha = 0.3, size = 3.5,
-						 position = position_jitter(width = .04, height = 0.4))+
+						 alpha = 0.3, size = 4.5,
+						 position = position_jitter(width = .05, height = 0.5))+
 	scale_fill_viridis_d(option = "D")+
 	labs(fill = "Functional group")+
 	ggtitle("Seed response to carrion")+
@@ -175,10 +180,12 @@ bank <- ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
   strip.text.x = element_blank())+
 	theme(legend.position = "bottom")+
 	theme(
-  axis.title.x = element_text(size = 12),
-  axis.text.x = element_text(size = 7),
-  axis.title.y = element_text(size = 12),
-  axis.text.y = element_text(size = 10))+
+	title = element_text(size = 18),
+  axis.title.x = element_text(size = 18),
+  axis.text.x = element_text(size = 18),
+  axis.title.y = element_text(size = 18),
+  axis.text.y = element_text(size = 18))+
 	theme(axis.title.x = element_text(margin = margin(t = 20)))+
-	theme(plot.title = element_text(hjust = 0.5))
-
+	theme(plot.title = element_text(hjust = 0.5, size = 18))+
+	theme(legend.text=element_text(size=20))+
+	theme(legend.title=element_text(size=20))
