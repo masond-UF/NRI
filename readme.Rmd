@@ -26,7 +26,9 @@ spec_time.R creates the ggplot object "panel_c"
 
 run veg.R creates the ggplot object "ord_final"
 
-storyboard.R saves these ggplot objects as png files
+storyboard.R saves these ggplot objects as jpeg files
+
+images must scaled down 40% before submission to meet journal requirements
 
 ```
 

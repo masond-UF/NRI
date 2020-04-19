@@ -52,14 +52,15 @@ march_species_scores <- as.data.frame(scores(march_ord, "species"))
 # create a column of species, from the rownames of species.scores
 march_species_scores$Species <- rownames(march_species_scores)  
 # Use ggplot2 to visualize the March ordination ####
-ggplot() + 
-	ggrepel::geom_text_repel(data=march_data_scores_env,
-						aes(x=NMDS1,y=NMDS2,label=Site))+
-	geom_point(data=march_data_scores_env,
-						 aes(x=NMDS1,y=NMDS2,shape=Exclusion,colour=Carrion),size=3)+
-	coord_equal()+
-	theme_classic()+
-	scale_color_manual(values = c("High" = "Blue", "Low" = "Orange"))
+# ggplot() + 
+	# ggrepel::geom_text_repel(data=march_data_scores_env,
+						# aes(x=NMDS1,y=NMDS2,label=Site))+
+	# geom_point(data=march_data_scores_env,
+						 # aes(x=NMDS1,y=NMDS2,shape=Exclusion,colour=Carrion),size=3)+
+	# coord_equal()+
+	# theme_classic()+
+	# scale_color_manual(values = c("High" = "Blue", "Low" = "Orange"))+
+	
 # Create April ordination ####
 april_ord <- metaMDS(april_veg)
 

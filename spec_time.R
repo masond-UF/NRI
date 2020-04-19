@@ -7,7 +7,7 @@ library(viridis)
 
 # Ignore "inactive functions"
 
-spec_time <- function(x){
+# spec_time <- function(x){
 
 veg_all <- read.csv("OKMME_veg.csv") 
 func_veg <- read.csv("func_veg.csv") 
@@ -114,7 +114,7 @@ final$Treatment <- factor(final$Treatment, levels = c("CH", "CO", "CS", "MH", "M
 																 "High biomass & scavenger exclusion"))
 return(final)
 } # eff size diff btwn plot & reference for "x" sp 
-spec_time_figure <- function(x){
+# spec_time_figure <- function(x){
 p <- ggplot(x, aes(x = Date, y = Mean))+
 	geom_point()+
 	ylab("Mean Abundance Effect Size")+
@@ -294,7 +294,7 @@ return(p)
 q_colors =  25 
 v_colors =  viridis(q_colors, option = "D") # match colors w/ other figs
 
-# produce the DF
+# produce the DF####
 PD <- spec_time_2("PD")
 ND <- spec_time_2("ND")
 PY <- spec_time_2("PY")
@@ -318,9 +318,9 @@ ND_fig <-ggplot(ND, aes(x = Date, y = smean))+
 	facet_wrap(~Treatment)+
 	theme(strip.text.x = element_text(size = 8))+
 	theme(axis.text.x = element_text(size = 15))+
-	theme(axis.title.x = element_text(size = 15))+
+	theme(axis.title.x = element_text(size = 18))+
 	theme(axis.text.y = element_text(size = 15))+
-	theme(axis.title.y = element_text(size = 15))+
+	theme(axis.title.y = element_text(size = 18))+
 	theme(title = element_text(size = 15))+
 	scale_x_date(limits = as.Date(c("2019-03-21", "2019-08-01")),
 	date_labels = "%b",
@@ -343,9 +343,9 @@ PD_fig <- ggplot(PD, aes(x = Date, y = smean))+
 	facet_wrap(~Treatment)+
 	theme(strip.text.x = element_text(size = 8))+
 	theme(axis.text.x = element_text(size = 15))+
-	theme(axis.title.x = element_text(size = 15))+
+	theme(axis.title.x = element_text(size = 18))+
 	theme(axis.text.y = element_text(size = 15))+
-	theme(axis.title.y = element_text(size = 15))+
+	theme(axis.title.y = element_text(size = 18))+
 	theme(title = element_text(size = 15))+
 	scale_x_date(limits = as.Date(c("2019-03-21", "2019-08-01")),
 	date_labels = "%b",
@@ -369,9 +369,9 @@ PY_fig <- ggplot(PY, aes(x = Date, y = smean))+
 	facet_wrap(~Treatment)+
 	theme(strip.text.x = element_text(size = 8))+
 	theme(axis.text.x = element_text(size = 15))+
-	theme(axis.title.x = element_text(size = 15))+
+	theme(axis.title.x = element_text(size = 18))+
 	theme(axis.text.y = element_text(size = 15))+
-	theme(axis.title.y = element_text(size = 15))+	
+	theme(axis.title.y = element_text(size = 18))+	
 	theme(title = element_text(size = 15))+
 	scale_x_date(limits = as.Date(c("2019-03-21", "2019-08-01")),
 	date_labels = "%b",
@@ -393,14 +393,15 @@ NONE_fig <- ggplot(NONE, aes(x = Date, y = smean))+
 	facet_wrap(~Treatment)+
 	theme(strip.text.x = element_text(size = 8))+
 	theme(axis.text.x = element_text(size = 15))+
-	theme(axis.title.x = element_text(size = 15))+
+	theme(axis.title.x = element_text(size = 18))+
 	theme(axis.text.y = element_text(size = 15))+
-	theme(axis.title.y = element_text(size = 15))+	
+	theme(axis.title.y = element_text(size = 18))+	
 	theme(title = element_text(size = 15))+
 	scale_x_date(limits = as.Date(c("2019-03-21", "2019-08-01")),
 	date_labels = "%b",
 	date_breaks = "1 month")+
 	ggtitle("Space open for colonization")+
 	theme(axis.title.y=element_blank())
+
 # put it together ####
 panel_c <- plot_grid(ND_fig, PD_fig, PY_fig, NONE_fig)

@@ -1,40 +1,28 @@
 # 13 April—seed bank/rain logistic GLM ####
 library(mice)
 library(tidyverse)
-library(lme4)
 library(ggplot2)
+library(gridExtra)
+
 raw <- read.csv("PACKETS_SPRING_2020.csv") # load in data
-raw <- raw[,c(1:7,19)] # just keep the final outcome data
 d <-  raw %>% 
 	filter(PLOT != "REF") # separate out the reference plots
 ref <-  raw %>% 
 	filter(PLOT == "REF") # keep just the reference plots
 # Date explortation ####
-ggplot(d, aes(x = FINAL.STATUS))+
-	geom_histogram()+
-	facet_wrap(~TYPE)
+# ggplot(d, aes(x = FINAL.STATUS))+
+	# geom_histogram()+
+	# facet_wrap(~TYPE)
 
-ggplot(ref, aes(x = FINAL.STATUS))+
-	geom_histogram()+
-	facet_wrap(~TYPE)
+# ggplot(ref, aes(x = FINAL.STATUS))+
+	#geom_histogram()+
+	#facet_wrap(~TYPE)
 # Permutate the missing data ####
 imputed <- mice(data = d)
 d <- complete(imputed)
 
 imputed <- mice(data = ref)
 ref <- complete(imputed)
-
-# Conduct the GLM ####
-
-
-m <- glmer(FINAL.STATUS ~ TYPE + BIOMASS + TREATMENT + (1|SITE) + (1|PACKET), 
-					family = binomial, data = d)
-summary(m)
-
-# Translate odds-ratio into probabilities
-exp(-1.1954)/(1+exp(-1.1954))
-exp(-1.1954 - 0.6839)/(1+exp(-1.1954-0.6839))
-exp(-1.1954 - 0.7826643)/(1+exp(-1.1954-0.7826643))
 
 # Create effect size dataframe ####
 ref_survival <- ref %>% 
@@ -90,47 +78,33 @@ m4 <- lme(fixed = diff ~ TYPE + BIOMASS + PACKET,
 				 random = ~1|SITE, data = survival, method = "ML")
 m5 <- lme(fixed = diff ~ TYPE + PACKET,
 				 random = ~1|SITE, data = survival, method = "ML")
+# Make a boxplot [SKIP]####
 
-plot(m2) # residuals homogenous
-shapiro.test(m2$residuals) # residuals normally distributed
-summary(m5)
-summary(m3)
-# Make a boxplot ####
-install.packages("seaborn.boxplot")
-survival <- survival %>% 
-	mutate(ln = log(survival))
-
-ggplot(data = survival, aes(x = PACKET, y = diff))+
-	geom_boxplot(aes(fill  = TYPE))+
-	scale_fill_viridis_d(option = "D")+
-	ylab("Δ Survival")+
-	labs(fill = "Functional group")+
-	facet_grid(BIOMASS~EXCL)+
-	xlab("Placement")+
-	theme_bw()
+# ggplot(data = survival, aes(x = PACKET, y = diff))+
+	# geom_boxplot(aes(fill  = TYPE))+
+	# scale_fill_viridis_d(option = "D")+
+	# ylab("Δ Survival")+
+	# labs(fill = "Functional group")+
+	# facet_grid(BIOMASS~EXCL)+
+	# xlab("Placement")+
+	# theme_bw()
 
 
-ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
-	geom_jitter(aes(fill = TYPE), color = "black", pch = 21, 
+# ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
+	# geom_jitter(aes(fill = TYPE), color = "black", pch = 21, 
 						 alpha = 0.3, size = 3.5,
 						 position = position_jitter(width = .05, height = 0.5))+
-	scale_fill_viridis_d(option = "D")+
-	geom_boxplot(alpha = 0, colour = "black")+
-	labs(fill = "Functional group")+
-	ggtitle("Seed response to carrion")+
-	facet_grid(~TYPE)+
-	xlab("Placement")+
-	theme_bw()+
-	theme(strip.background = element_blank(),
-  strip.text.x = element_blank())
+	# scale_fill_viridis_d(option = "D")+
+	# geom_boxplot(alpha = 0, colour = "black")+
+	# labs(fill = "Functional group")+
+	# ggtitle("Seed response to carrion")+
+	# facet_grid(~TYPE)+
+	# xlab("Placement")+
+	# theme_bw()+
+	# theme(strip.background = element_blank(),
+  # strip.text.x = element_blank())
 
 # Create a version with mean and 95% CIs ####
-min.mean.sd.max <- function(x) { # Function for calculating summary statistics
-  r <- c(min(x), mean(x) - sd(x), mean(x), mean(x) + sd(x), max(x))
-  names(r) <- c("ymin", "lower", "middle", "upper", "ymax")
-  r
-}
-
 # rename levels of factor
 levels(survival$PACKET)[levels(survival$PACKET)=="AA"] <- "Rain adjacent"
 levels(survival$PACKET)[levels(survival$PACKET)=="AT"] <- "Rain proximal"
@@ -141,7 +115,6 @@ levels(survival$TYPE)[levels(survival$TYPE)=="ND"] <- "No dormancy"
 levels(survival$TYPE)[levels(survival$TYPE)=="PD"] <- "Physiological dormancy"
 levels(survival$TYPE)[levels(survival$TYPE)=="PY"] <- "Physical dormancy"
 
-
 # reorder levels of factor
 survival$PACKET <- factor(survival$PACKET, levels = c("Bank proximal",
 										"Bank adjacent", "Rain proximal", "Rain adjacent"))
@@ -149,13 +122,7 @@ survival$PACKET <- factor(survival$PACKET, levels = c("Bank proximal",
 # make the label take up two lines
 levels(survival$PACKET) <- gsub(" ", "\n", levels(survival$PACKET))
 
-
-
 # First write a function that compute the min, mean-1SEM, mean, mean+1SEM, and Max. Then map these 5 values onto a boxplot using stat_summary.
-
-library(gridExtra)
-library(ggplot2)
-
 MinMeanSEMMax <- function(x) {
   v <- c(min(x), mean(x) - sd(x)/sqrt(length(x)), mean(x), mean(x) + sd(x)/sqrt(length(x)), max(x))
   names(v) <- c("ymin", "lower", "middle", "upper", "ymax")
@@ -183,7 +150,7 @@ bank <- ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
 	title = element_text(size = 18),
   axis.title.x = element_text(size = 18),
   axis.text.x = element_text(size = 18),
-  axis.title.y = element_text(size = 18),
+  axis.title.y = element_text(size = 20),
   axis.text.y = element_text(size = 18))+
 	theme(axis.title.x = element_text(margin = margin(t = 20)))+
 	theme(plot.title = element_text(hjust = 0.5, size = 18))+
