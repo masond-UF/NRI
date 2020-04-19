@@ -1,0 +1,100 @@
+---
+title: "readme & metadata"
+author: "David Mason"
+date: "4/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# NRI.Rproj
+
+NRI.Rproj is an R project file used to produce analysis and figures related to an ongoing cross-factorial mass mortality experiment at the Nobel Research Institute (NRI) that began in Spring 2019.
+
+## Producing images for the storyboard assignment
+
+Execute the scripts in the following order
+
+```bash
+concept_diagram.R creates the ggplot object "diagram"
+
+seed_GLM.R creates the ggplot object "bank"
+
+spec_time.R creates the ggplot object "panel_c"
+
+run veg.R creates the ggplot object "ord_final"
+
+storyboard.R saves these ggplot objects as png files
+
+```
+
+## Image attribution 
+```bash
+The following icons are licensed as Creative Commons CCBY and hosted by the Noun Project 
+
+“Plant”, “Plant”, & “flower” # by Alex Muravev
+
+“Pumpkin Seeds”, “flax seeds”, & “ajwan seeds” # by Oleksandr Panasovskyi
+
+“animal skeleton” # by Laymik 
+
+```
+
+## Map attribution 
+```bash
+# Google earth V 7.3.2.5776 (April 18, 2020). Oswalt Ranch, Oklahoma, USA.34° 0.208'N, 97°v13.446”W, Eye alt 2.46 km. Imagery date: November 26, 2018, March 3, 2019
+
+```
+
+## PACKETS_SPRING_2020.csv [data]
+```bash
+Germination & survival data for carrion seed experiment to be used in seed_GLM.R
+
+SITE # location of plots (WP = Wellpad, OS = Oswalt triangle, DF = Dixon Fence, GG = Gilgai
+
+PLOT # subplot nested within site
+
+BIOMASS # level of carrion biomass (M = Mass mortality/high, C = Control/single carcass/low)
+
+TREATMENT # exclusion treatment simulating death of animal functional group (S = Scavenger, H = Herbivore, O = open)
+
+PACKET # location of mesh seed packet simulating seed bank or seed rain (BA = Bank adjacent, BU = Bank under/proximal, AA = After adjacent, AT = After top/proximal)
+
+TYPE # Seed functional group (ND = No dormancy, PD = Physiological dormancy, PY = physical dormancy)
+
+SPECIES # Plant species (MASY = Malus sylvestris, TRAE = Triticum aestivum, SIALD = Sinapis alba, RHGL = Rhus glabra, SYRIN = Syringa sp, PISY = Pinus sylvestris, BIOR = Bixa orellana, HOVU = Hordeum vulgare, BEVU2 = Beta vulgaris, CAAN4 = Capiscum annum, GLMA4 = Glycine max, PISA6 = Pisum sativum)
+
+ID # Seed subsample number 
+
+FINAL.STATUS # Survival of seeds (0 = unretrieved/dead, 1 = retrieved/germinated)
+
+```
+
+## func_veg_rel.csv.csv [data]
+```bash
+Plant community composition matrix aggregated into functional groups and relativized (as fraction of total biomass) to be used in spec_time.R
+
+ND # Plants with non-dormant seeds
+
+PD #  Plants with seeds exhibiting physiological dormancy
+
+PY # Plants with seeds exhibiting physical dormancy
+
+NONE # ground absent of living plants (i.e., covered with carrion, dead plants, bare ground, or litter)
+
+```
+
+## OKMME_veg.csv [data]
+```bash
+Plant community composition matrix delineated by species to be used in veg.R 
+
+Site # Location of plots (WP = Wellpad, OS = Oswalt triangle, DF = Dixon Fence, GG = Gilgai
+
+Treatment # Combination of exclusion and carrion biomass (M = Mass mortality/high, C = Control/single carcass/low, S = Scavenger, H = Herbivore, O = open)
+
+Month, Day, Year, Date # Sampling date
+
+Species are listed as USDA plant codes.
+```
