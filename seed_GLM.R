@@ -62,23 +62,13 @@ survival <- d %>%
 							 ifelse((SITE == "WP" & TYPE == "PD") & (PACKET == "BA" | PACKET == "BU"), ref_survival[23,4],
 							 ifelse((SITE == "WP" & TYPE == "PY") & (PACKET == "BA" | PACKET == "BU"), ref_survival[24,4],
 							 			 NA)))))))))))))))))))))))))
-
-# Model the difference ####
+# Get the difference
 survival$diff <- survival$SURV - as.numeric(survival$REF)
 survival <- survival %>% 
 	separate(TREATMENT, c("BIOMASS", "EXCL"), sep = "_")
 
-hist(survival$diff)
 
-m2 <- lme(fixed = diff ~ TYPE + BIOMASS + EXCL + PACKET,
-				 random = ~1|SITE, data = survival, method = "ML")
-m3 <- lme(fixed = diff ~ TYPE + EXCL + PACKET,
-				 random = ~1|SITE, data = survival, method = "ML")
-m4 <- lme(fixed = diff ~ TYPE + BIOMASS + PACKET,
-				 random = ~1|SITE, data = survival, method = "ML")
-m5 <- lme(fixed = diff ~ TYPE + PACKET,
-				 random = ~1|SITE, data = survival, method = "ML")
-# Make a boxplot [SKIP]####
+# Make a boxplot with all variables [SKIP]####
 
 # ggplot(data = survival, aes(x = PACKET, y = diff))+
 	# geom_boxplot(aes(fill  = TYPE))+
@@ -92,8 +82,8 @@ m5 <- lme(fixed = diff ~ TYPE + PACKET,
 
 # ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
 	# geom_jitter(aes(fill = TYPE), color = "black", pch = 21, 
-						 alpha = 0.3, size = 3.5,
-						 position = position_jitter(width = .05, height = 0.5))+
+						 # alpha = 0.3, size = 3.5,
+						 # position = position_jitter(width = .05, height = 0.5))+
 	# scale_fill_viridis_d(option = "D")+
 	# geom_boxplot(alpha = 0, colour = "black")+
 	# labs(fill = "Functional group")+
@@ -129,13 +119,12 @@ MinMeanSEMMax <- function(x) {
   v
 }
 
-
 # Boxplot ####
 bank <- ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
 	stat_summary(fun.data = MinMeanSEMMax, geom = "boxplot", color = "black")+ 
 	geom_jitter(aes(fill = TYPE), color = "black", pch = 21, 
-						 alpha = 0.3, size = 4.5,
-						 position = position_jitter(width = .05, height = 0.5))+
+						 alpha = 0.25, size = 4.5,
+						 position = position_jitter(width = .05, height = 0.1))+
 	scale_fill_viridis_d(option = "D")+
 	labs(fill = "Functional group")+
 	ggtitle("Seed response to carrion")+
