@@ -105,6 +105,10 @@ levels(survival$TYPE)[levels(survival$TYPE)=="ND"] <- "No dormancy"
 levels(survival$TYPE)[levels(survival$TYPE)=="PD"] <- "Physiological dormancy"
 levels(survival$TYPE)[levels(survival$TYPE)=="PY"] <- "Physical dormancy"
 
+survival$BIOMASS <- as.factor(survival$BIOMASS)
+levels(survival$BIOMASS)[levels(survival$BIOMASS)=="C"] <- "Low biomass"
+levels(survival$BIOMASS)[levels(survival$BIOMASS)=="M"] <- "High biomass"
+
 # reorder levels of factor
 survival$PACKET <- factor(survival$PACKET, levels = c("Bank proximal",
 										"Bank adjacent", "Rain proximal", "Rain adjacent"))
@@ -120,20 +124,18 @@ MinMeanSEMMax <- function(x) {
 }
 
 # Boxplot ####
-bank <- ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
+ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
 	stat_summary(fun.data = MinMeanSEMMax, geom = "boxplot", color = "black")+ 
 	geom_jitter(aes(fill = TYPE), color = "black", pch = 21, 
-						 alpha = 0.25, size = 4.5,
+						 alpha = 0.3, size = 2.5,
 						 position = position_jitter(width = .05, height = 0.1))+
 	scale_fill_viridis_d(option = "D")+
 	labs(fill = "Functional group")+
 	ggtitle("Seed response to carrion")+
-	facet_grid(~TYPE)+
+	facet_grid(TYPE~BIOMASS)+
 	xlab("Seed location")+
 	ylab("Δ Survival")+
 	theme_bw()+
-	theme(strip.background = element_blank(),
-  strip.text.x = element_blank())+
 	theme(legend.position = "bottom")+
 	theme(
 	title = element_text(size = 18),
@@ -144,4 +146,10 @@ bank <- ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
 	theme(axis.title.x = element_text(margin = margin(t = 20)))+
 	theme(plot.title = element_text(hjust = 0.5, size = 18))+
 	theme(legend.text=element_text(size=20))+
-	theme(legend.title=element_text(size=20))
+	theme(legend.title=element_text(size=20))+
+	theme(panel.grid.major = element_blank(),
+        strip.background = element_blank(),
+        panel.border = element_rect(colour = "black"))+
+	theme(strip.text = element_text(size=18))
+
+ggsave("seed_bank_IQAAP.png", width = 11, height = 10.5, units = c("in"), dpi = 600)

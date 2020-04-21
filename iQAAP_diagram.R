@@ -54,9 +54,9 @@ diagram <- ggplot(data.frame(a=1)) + xlim(1, 31) + ylim(1, 32)+
 	annotate("text", x = 22.86, y = 25.544, label = "PY", size = 3)+
 	annotate("text", x = 10, y = 13, label = "PY", size = 5)+
 	annotate("text", x = 11, y = 1, label = "PY", size = 5)+
-	annotate("text", x = 1, y = 21, label = "Figure 3", size = 5)+
-	annotate("text", x = 1, y = 12, label = "Figure 4", size = 5)+
-	annotate("text", x = 23, y = 18.6, label = "Figure 5", size = 5)+
+	annotate("text", x = 1, y = 21, label = "Figure 4", size = 5)+
+	annotate("text", x = 1, y = 12, label = "Figure 6", size = 5)+
+	annotate("text", x = 23, y = 18.6, label = "Figure 7", size = 5)+
 	annotation_custom(PY, xmin = 3, xmax = 5, ymin = 13, ymax = 18)+
 	annotation_custom(PD, xmin = 6, xmax = 8, ymin = 13, ymax = 18)+
 	annotation_custom(ND, xmin = 9, xmax = 11, ymin = 13, ymax = 18)+
