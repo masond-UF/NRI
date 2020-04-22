@@ -132,7 +132,7 @@ ggplot(data = survival, aes(x = PACKET, y = diff, color = TYPE))+
 	scale_fill_viridis_d(option = "D")+
 	labs(fill = "Functional group")+
 	ggtitle("Seed response to carrion")+
-	facet_grid(TYPE~BIOMASS)+
+	facet_grid(~TYPE)+
 	xlab("Seed location")+
 	ylab("Δ Survival")+
 	theme_bw()+
